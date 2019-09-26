@@ -15,14 +15,13 @@
         <v-form @submit.prevent="addUserManagerFolder()">
             <v-card-text>
                 <v-row>
-                    <v-col class="item-avatar" cols="12" sm="3" md="2" v-for="(user,index) in users" :key="index">
+                    <v-col cols="12" sm="4" md="3">
                         <v-avatar
                             size="70px"
                             color="#e2e2e2e2"
                         >
-                            <img v-if="user.AVATAR != null" :src="$store.state.PUBLIC_URL + user.AVATAR" alt="">
+                        
                         </v-avatar>
-                        <p>{{user.USERNAME}}</p>
                     </v-col>
                 </v-row>
                 <v-row>
@@ -43,7 +42,7 @@
                                     size="50px"
                                     color="#e2e2e2"
                                 >
-                                    <img v-if="user.AVATAR != null" :src="$store.state.PUBLIC_URL + user.AVATAR" alt="">
+                                    <!-- <img src="src" alt="alt"> -->
                                 </v-avatar>
                             </v-col>
                             <v-col cols="12" sm="6" md="7" style="line-height:50px">{{user.USERNAME}}</v-col>
@@ -100,17 +99,10 @@ export default {
                 {
                     this.searchs = response.data
                     this.check = []
-                    this.users.forEach(element => {
-                        this.check.push(element["UUID_USER"])
-                    });
                 }
                 else
                 {
                     this.searchs = []
-                    this.check = []
-                     this.users.forEach(element => {
-                        this.check.push(element["UUID_USER"])
-                    });
                 
                 }
                
@@ -123,7 +115,7 @@ export default {
             console.log(this.check)
             data.append("UUIDS",this.check)
             data.append("UUID_FOLDER_MANAGEMENT",this.folder.UUID_FOLDER_MANAGEMENT)
-            this.$http.post(this.$store.state.API_URL + 'manager/folder/create?api_token='+this.$session.get('token')+'&NAME_FOLDER='+this.folder.NAME_FOLDER,data)
+            this.$http.post(this.$store.state.API_URL + 'manager/folder/create?api_token='+this.$session.get('token'),data)
             .then((response) => {
                 this.ApiGetManagerFolder()
             })
@@ -132,22 +124,12 @@ export default {
         {
             this.$http.get(this.$store.state.API_URL + 'manager/folder?api_token='+this.$session.get('token')+'&UUID_FOLDER_MANAGEMENT='+this.folder.UUID_FOLDER_MANAGEMENT).then((response) => {
                 this.users = response.data
-                this.check = []
-                response.data.forEach(element => {
-                    this.check.push(element["UUID_USER"])
-                });
             })
         }
     },
     created()
     {
-        this.$http.get(this.$store.state.API_URL + 'user?api_token='+this.$session.get('token')).then((response) => {
-            this.searchs = response.data
-        })
+        
     }
 }
 </script>
-
-<style scoped>
-.item-avatar {text-align: center}
-</style>

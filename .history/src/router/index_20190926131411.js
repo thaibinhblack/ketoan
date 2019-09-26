@@ -29,10 +29,6 @@ const routes = [
                 component: () => import("@/page/user/users.vue")
             },
             {
-                path: 'user/:username',
-                component: () => import("@/page/user/detailUser.vue")
-            },
-            {
                 path: 'add-user',
                 component: () => import('@/page/user/addUser.vue')
             }

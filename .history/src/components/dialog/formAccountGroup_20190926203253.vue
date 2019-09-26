@@ -132,7 +132,6 @@ export default {
         {
             this.$http.get(this.$store.state.API_URL + 'manager/folder?api_token='+this.$session.get('token')+'&UUID_FOLDER_MANAGEMENT='+this.folder.UUID_FOLDER_MANAGEMENT).then((response) => {
                 this.users = response.data
-                this.check = []
                 response.data.forEach(element => {
                     this.check.push(element["UUID_USER"])
                 });

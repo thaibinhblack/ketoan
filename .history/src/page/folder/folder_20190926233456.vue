@@ -114,20 +114,12 @@ export default {
        ApiGetFolder(year)
        {
            this.$http.get(this.$store.state.API_URL + 'user?api_token='+this.$session.get('token')+'&get_data=1').then((response) => {
-               if(response.data.UUID_RULE == 'coder-2019')
-               {
-                    this.$http.get(this.$store.state.API_URL + 'folder?api_token='+this.$session.get('token')+'&year='+year).then((response) => {
-                        this.folders = response.data 
-                    })
-               }
-               else
-               {
-                    this.$http.get(this.$store.state.API_URL + 'folder?api_token='+this.$session.get('token')+'&year='+year+'&filter=1').then((response) => {
-                        this.folders = response.data 
-                    })
-               }
+               console.log(response.data)
            })
+            this.$http.get(this.$store.state.API_URL + 'folder?api_token='+this.$session.get('token')+'&year='+year).then((response) => {
+                this.folders = response.data
            
+        })
        },
        updateFolder(folder)
        {

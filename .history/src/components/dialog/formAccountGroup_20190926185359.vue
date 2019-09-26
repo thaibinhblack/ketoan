@@ -14,17 +14,24 @@
         </v-card-title>
         <v-form @submit.prevent="addUserManagerFolder()">
             <v-card-text>
-                <v-row>
-                    <v-col class="item-avatar" cols="12" sm="3" md="2" v-for="(user,index) in users" :key="index">
+                <v-slide-group
+                    class="pa-4"
+                    active-class="success"
+                    show-arrows
+                    >
+                    <v-slide-item
+                        v-for="(user,index) in users"
+                        :key="index"
+                        v-slot:default="{ active, toggle }"
+                    >
                         <v-avatar
-                            size="70px"
-                            color="#e2e2e2e2"
+                            size="80px"
+                            color="#e2e2e2"
                         >
-                            <img v-if="user.AVATAR != null" :src="$store.state.PUBLIC_URL + user.AVATAR" alt="">
+                            <img v-if="user.AVATAR != null" :src="$store.state.PUBLIC_URL + user.AVATAR" alt="alt">
                         </v-avatar>
-                        <p>{{user.USERNAME}}</p>
-                    </v-col>
-                </v-row>
+                    </v-slide-item>
+                </v-slide-group>
                 <v-row>
                     <v-col cols="12" sm="12">
                         <v-text-field
@@ -43,7 +50,7 @@
                                     size="50px"
                                     color="#e2e2e2"
                                 >
-                                    <img v-if="user.AVATAR != null" :src="$store.state.PUBLIC_URL + user.AVATAR" alt="">
+                                    <!-- <img src="src" alt="alt"> -->
                                 </v-avatar>
                             </v-col>
                             <v-col cols="12" sm="6" md="7" style="line-height:50px">{{user.USERNAME}}</v-col>
@@ -84,12 +91,6 @@ export default {
             users: []
         }
     },
-    watch: {
-        folder()
-        {
-            this.ApiGetManagerFolder()
-        }
-    },
     methods:{
         ApiSearchUser()
         {
@@ -100,17 +101,10 @@ export default {
                 {
                     this.searchs = response.data
                     this.check = []
-                    this.users.forEach(element => {
-                        this.check.push(element["UUID_USER"])
-                    });
                 }
                 else
                 {
                     this.searchs = []
-                    this.check = []
-                     this.users.forEach(element => {
-                        this.check.push(element["UUID_USER"])
-                    });
                 
                 }
                
@@ -123,31 +117,21 @@ export default {
             console.log(this.check)
             data.append("UUIDS",this.check)
             data.append("UUID_FOLDER_MANAGEMENT",this.folder.UUID_FOLDER_MANAGEMENT)
-            this.$http.post(this.$store.state.API_URL + 'manager/folder/create?api_token='+this.$session.get('token')+'&NAME_FOLDER='+this.folder.NAME_FOLDER,data)
+            this.$http.post(this.$store.state.API_URL + 'manager/folder/create?api_token='+this.$session.get('token'),data)
             .then((response) => {
                 this.ApiGetManagerFolder()
             })
         },
         ApiGetManagerFolder()
         {
-            this.$http.get(this.$store.state.API_URL + 'manager/folder?api_token='+this.$session.get('token')+'&UUID_FOLDER_MANAGEMENT='+this.folder.UUID_FOLDER_MANAGEMENT).then((response) => {
+            this.$http.get(this.$store.state.API_URL + 'manager/folder?api_token='+this.$session.get('token')).then((response) => {
                 this.users = response.data
-                this.check = []
-                response.data.forEach(element => {
-                    this.check.push(element["UUID_USER"])
-                });
             })
         }
     },
     created()
     {
-        this.$http.get(this.$store.state.API_URL + 'user?api_token='+this.$session.get('token')).then((response) => {
-            this.searchs = response.data
-        })
+        this.ApiGetManagerFolder()
     }
 }
 </script>
-
-<style scoped>
-.item-avatar {text-align: center}
-</style>

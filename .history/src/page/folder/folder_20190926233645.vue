@@ -122,7 +122,7 @@ export default {
                }
                else
                {
-                    this.$http.get(this.$store.state.API_URL + 'folder?api_token='+this.$session.get('token')+'&year='+year+'&filter=1').then((response) => {
+                    this.$http.get(this.$store.state.API_URL + 'folder?api_token='+this.$session.get('token')+'&year='+year+'&filder=1').then((response) => {
                         this.folders = response.data 
                     })
                }
